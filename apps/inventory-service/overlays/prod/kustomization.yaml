@@ -9,5 +9,5 @@ resources:
 patches:
   - path: patch-deployment.yaml
 images:
-  - name: ghcr.io/example-org/inventory-service
+  - name: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/inventory-service
     newTag: v1.0.0
