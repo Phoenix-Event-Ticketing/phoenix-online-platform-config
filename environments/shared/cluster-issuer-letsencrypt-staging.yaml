@@ -1,0 +1,18 @@
+# ACME account key Secret is created by cert-manager in the cert-manager namespace.
+# DNS-01: Cloudflare API token Secret must exist in the same namespace as each Certificate (phoenix-dev / phoenix-prod).
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-staging
+spec:
+  acme:
+    email: REPLACE_ACME_EMAIL
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-staging-account-key
+    solvers:
+      - dns01:
+          cloudflare:
+            apiTokenSecretRef:
+              name: cloudflare-api-token
+              key: api-token

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: inventory-service-config
+  labels:
+    app.kubernetes.io/name: inventory-service
+    app.kubernetes.io/component: api
+    app.kubernetes.io/part-of: phoenix-platform
+data:
+  PORT: "8080"
+  MONGODB_DATABASE: phoenix_inventory
+  ENVIRONMENT: development
+  SERVICE_NAME: inventory-service
+  LOG_LEVEL: info
+  HOLD_TTL_MINUTES: "15"

@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: phoenix-prod-gateway-tls
+spec:
+  secretName: phoenix-prod-gateway-tls
+  dnsNames:
+    - api.example.com
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  targetRef:
+    name: phoenix-prod
+    kind: Gateway
+    group: gateway.networking.k8s.io

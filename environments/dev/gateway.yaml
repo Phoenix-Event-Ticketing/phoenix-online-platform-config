@@ -1,0 +1,25 @@
+# Confirm gatewayClassName: kubectl get gatewayclass
+# cert-manager creates Secret phoenix-dev-gateway-tls and keeps Gateway listener in sync.
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: phoenix-dev
+  labels:
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+spec:
+  gatewayClassName: gke-l7-global-external-managed
+  listeners:
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname: api-dev.pheonix-project.online
+      allowedRoutes:
+        namespaces:
+          from: Same
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            group: ""
+            name: phoenix-dev-gateway-tls

@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: phoenix-prod
+resources:
+  - ../shared
+  - namespace.yaml
+  - gateway.yaml
+  - httproute.yaml
+  - cloudflare-api-token-externalsecret.yaml
+  - certificate.yaml
+  - resourcequota.yaml
+  - limitrange.yaml
+  - ../../apps/inventory-service/overlays/prod
+  - ../../apps/user-service/overlays/prod
+  # Add service overlays here as they become available.
+  # - ../../apps/booking-service/overlays/prod
+  # - ../../apps/payment-service/overlays/prod
+  # - ../../apps/notification-service/overlays/prod

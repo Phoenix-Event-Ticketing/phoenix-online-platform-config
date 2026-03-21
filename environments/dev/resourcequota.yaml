@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: phoenix-dev-quota
+  namespace: phoenix-dev
+  labels:
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+spec:
+  hard:
+    pods: "10"
+    services: "10"
+    persistentvolumeclaims: "4"
+    requests.cpu: "1"
+    requests.memory: 1Gi
+    limits.cpu: "2"
+    limits.memory: 2Gi

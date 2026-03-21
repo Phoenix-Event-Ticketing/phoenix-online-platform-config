@@ -1,0 +1,16 @@
+# Requires cert-manager with Gateway API support and a Cloudflare DNS API token in Secret cloudflare-api-token.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: phoenix-dev-gateway-tls
+spec:
+  secretName: phoenix-dev-gateway-tls
+  dnsNames:
+    - api-dev.example.com
+  issuerRef:
+    name: letsencrypt-staging
+    kind: ClusterIssuer
+  targetRef:
+    name: phoenix-dev
+    kind: Gateway
+    group: gateway.networking.k8s.io
