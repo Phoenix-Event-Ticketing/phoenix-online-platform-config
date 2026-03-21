@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: user-service-mysql
+  labels:
+    app.kubernetes.io/name: user-service-mysql
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: phoenix-platform
+spec:
+  serviceName: user-service-mysql
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: user-service-mysql
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: user-service-mysql
+        app.kubernetes.io/component: database
+        app.kubernetes.io/part-of: phoenix-platform
+    spec:
+      securityContext:
+        fsGroup: 999
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: mysql
+              containerPort: 3306
+              protocol: TCP
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-mysql-secrets
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_DATABASE
+              value: phoenix_users
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/mysql
+          readinessProbe:
+            tcpSocket:
+              port: mysql
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: mysql
+            initialDelaySeconds: 45
+            periodSeconds: 20
+            timeoutSeconds: 5
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+      # PVCs per pod ordinal (e.g. data-user-service-mysql-0). Omit storageClassName
+      # so the cluster default StorageClass is used (on GKE this provisions GCE PD).
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        labels:
+          app.kubernetes.io/name: user-service-mysql
+          app.kubernetes.io/component: database
+          app.kubernetes.io/part-of: phoenix-platform
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi

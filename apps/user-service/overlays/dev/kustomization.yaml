@@ -6,6 +6,7 @@ commonLabels:
 resources:
   - ../../base
   - external-secret.yaml
+  - mysql-external-secret.yaml
 patches:
   - path: patch-deployment.yaml
 images:

@@ -1,0 +1,18 @@
+# Headless service required for StatefulSet stable network identity (user-service-mysql-0).
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service-mysql
+  labels:
+    app.kubernetes.io/name: user-service-mysql
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: phoenix-platform
+spec:
+  clusterIP: None
+  selector:
+    app.kubernetes.io/name: user-service-mysql
+  ports:
+    - name: mysql
+      port: 3306
+      targetPort: mysql
+      protocol: TCP
