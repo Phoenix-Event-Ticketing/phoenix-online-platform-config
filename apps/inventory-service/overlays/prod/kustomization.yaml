@@ -4,10 +4,10 @@ namespace: phoenix-prod
 commonLabels:
   environment: prod
 resources:
-  - ../../base
-  - external-secret.yaml
+- ../../base
+- external-secret.yaml
 patches:
-  - path: patch-deployment.yaml
+- path: patch-deployment.yaml
 images:
   - name: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/inventory-service
     newTag: v1.0.0
