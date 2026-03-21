@@ -9,6 +9,6 @@ resources:
 patches:
 - path: patch-deployment.yaml
 images:
-- digest: sha256:0a36de4e4f068458f305639c08ffdcc4d5ed7605bb96e8fa82bec6d56e15095f
+- digest: sha256:7034aad41c0b9e2b2ef1c6a5333b4ff74cf2ae0a715a6b7fc5932c3854616512
   name: ghcr.io/example-org/inventory-service
   newName: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/inventory-service
