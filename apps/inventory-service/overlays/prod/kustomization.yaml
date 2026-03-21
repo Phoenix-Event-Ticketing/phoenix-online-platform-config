@@ -4,10 +4,11 @@ namespace: phoenix-prod
 commonLabels:
   environment: prod
 resources:
-  - ../../base
-  - external-secret.yaml
+- ../../base
+- external-secret.yaml
 patches:
-  - path: patch-deployment.yaml
+- path: patch-deployment.yaml
 images:
-  - name: ghcr.io/example-org/inventory-service
-    newTag: v1.0.0
+- digest: sha256:0a36de4e4f068458f305639c08ffdcc4d5ed7605bb96e8fa82bec6d56e15095f
+  name: ghcr.io/example-org/inventory-service
+  newName: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/inventory-service
