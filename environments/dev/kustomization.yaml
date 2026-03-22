@@ -13,6 +13,6 @@ resources:
   - ../../apps/inventory-service/overlays/dev
   - ../../apps/user-service/overlays/dev
   - ../../apps/booking-service/overlays/dev
+  - ../../apps/payment-service/overlays/dev
   # Add service overlays here as they become available.
-  # - ../../apps/payment-service/overlays/dev
   # - ../../apps/notification-service/overlays/dev

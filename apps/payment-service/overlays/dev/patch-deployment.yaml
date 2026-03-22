@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-service
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        environment: dev
+    spec:
+      containers:
+        - name: payment-service
+          env:
+            - name: NODE_ENV
+              value: development
+            - name: LOG_LEVEL
+              value: debug
+          resources:
+            requests:
+              cpu: 75m
+              memory: 128Mi
+            limits:
+              cpu: 400m
+              memory: 512Mi

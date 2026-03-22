@@ -1,9 +1,3 @@
-# Payment Service Placeholder
+# payment-service
 
-Create this service using the same layout as `apps/user-service`:
-
-- `base/`
-- `overlays/dev/`
-- `overlays/prod/`
-
-Add the corresponding overlay paths to `environments/dev/kustomization.yaml` and `environments/prod/kustomization.yaml` when the manifests are ready.
+Node/Express payment API: `base/` plus `overlays/dev` and `overlays/prod`. Includes **MongoDB** (`payment-service-mongodb` StatefulSet). Exposes `/api/payments`, `/api/refunds`, and health `/health`, `/ready` on port **8084**.

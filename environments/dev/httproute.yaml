@@ -33,3 +33,17 @@ spec:
       backendRefs:
         - name: booking-service
           port: 8080
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api/payments
+      backendRefs:
+        - name: payment-service
+          port: 8084
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api/refunds
+      backendRefs:
+        - name: payment-service
+          port: 8084
