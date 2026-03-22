@@ -26,3 +26,10 @@ spec:
       backendRefs:
         - name: user-service
           port: 8080
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /bookings
+      backendRefs:
+        - name: booking-service
+          port: 8080

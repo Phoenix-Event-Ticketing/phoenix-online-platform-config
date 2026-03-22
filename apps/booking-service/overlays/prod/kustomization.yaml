@@ -1,14 +1,15 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: phoenix-dev
+namespace: phoenix-prod
 commonLabels:
-  environment: dev
+  environment: prod
 resources:
   - ../../base
   - external-secret.yaml
   - mongodb-external-secret.yaml
 patches:
   - path: patch-deployment.yaml
+  - path: patch-configmap.yaml
 images:
-  - name: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/inventory-service
-    newTag: dev-123abc
+  - name: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/booking-service
+    newTag: v1.0.0

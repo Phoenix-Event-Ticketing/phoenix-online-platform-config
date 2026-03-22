@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: inventory-service-mongodb
+  labels:
+    app.kubernetes.io/name: inventory-service-mongodb
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: phoenix-platform
+spec:
+  serviceName: inventory-service-mongodb
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: inventory-service-mongodb
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: inventory-service-mongodb
+        app.kubernetes.io/component: database
+        app.kubernetes.io/part-of: phoenix-platform
+    spec:
+      securityContext:
+        fsGroup: 999
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: mongodb
+          image: mongo:7.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: mongodb
+              containerPort: 27017
+              protocol: TCP
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: root
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: inventory-service-mongodb-secrets
+                  key: MONGO_INITDB_ROOT_PASSWORD
+            - name: MONGO_INITDB_DATABASE
+              value: phoenix_inventory
+          volumeMounts:
+            - name: data
+              mountPath: /data/db
+          readinessProbe:
+            tcpSocket:
+              port: mongodb
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: mongodb
+            initialDelaySeconds: 45
+            periodSeconds: 20
+            timeoutSeconds: 5
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+      # PVCs per pod ordinal; omit storageClassName to use the cluster default (GKE GCE PD).
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        labels:
+          app.kubernetes.io/name: inventory-service-mongodb
+          app.kubernetes.io/component: database
+          app.kubernetes.io/part-of: phoenix-platform
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi

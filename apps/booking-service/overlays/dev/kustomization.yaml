@@ -10,5 +10,5 @@ resources:
 patches:
   - path: patch-deployment.yaml
 images:
-  - name: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/inventory-service
-    newTag: dev-123abc
+  - name: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/booking-service
+    newTag: dev-latest

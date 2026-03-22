@@ -1,9 +1,3 @@
-# Booking Service Placeholder
+# booking-service
 
-Create this service using the same layout as `apps/user-service`:
-
-- `base/`
-- `overlays/dev/`
-- `overlays/prod/`
-
-Add the corresponding overlay paths to `environments/dev/kustomization.yaml` and `environments/prod/kustomization.yaml` when the manifests are ready.
+Kubernetes manifests for the Phoenix booking API (`base/` + `overlays/dev` and `overlays/prod`). Includes a **MongoDB StatefulSet** (`booking-service-mongodb`) with its own PVC. Wired from `environments/dev` and `environments/prod`.

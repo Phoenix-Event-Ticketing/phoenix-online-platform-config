@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory-service-mongodb
+  labels:
+    app.kubernetes.io/name: inventory-service-mongodb
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: phoenix-platform
+spec:
+  clusterIP: None
+  selector:
+    app.kubernetes.io/name: inventory-service-mongodb
+  ports:
+    - name: mongodb
+      port: 27017
+      targetPort: mongodb
+      protocol: TCP

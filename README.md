@@ -59,6 +59,7 @@ This starter currently includes working manifests for:
 
 - `user-service`
 - `inventory-service`
+- `booking-service`
 
 ## TLS and ingress (Gateway API + Cloudflare DNS)
 
@@ -104,7 +105,7 @@ In this starter repo, image tags are set in the overlay `kustomization.yaml` fil
 
 Secret values are not committed to Git.
 
-- **Application secrets** (`DATABASE_URL`, `JWT_SECRET`, `MONGODB_URI`): [ExternalSecret](https://external-secrets.io/) manifests in each service overlay sync from **GCP Secret Manager** via `ClusterSecretStore` `phoenix-gcp`. Replace `REPLACE_GSM_*` placeholders in those files with your GSM secret names (use separate secrets per environment in practice).
+- **Application secrets** (`DATABASE_URL`, `JWT_SECRET`, `MONGODB_URI`, booking `MONGODB_URI` + `JWT_SECRET`, Mongo root passwords for in-cluster DBs): [ExternalSecret](https://external-secrets.io/) manifests in each service overlay sync from **GCP Secret Manager** via `ClusterSecretStore` `phoenix-gcp`. Replace `REPLACE_GSM_*` placeholders in those files with your GSM secret names (use separate secrets per environment in practice). For booking, set `MONGODB_URI` to the dedicated Mongo service (e.g. `mongodb://root:...@booking-service-mongodb:27017/booking_db?authSource=admin`) matching `REPLACE_GSM_BOOKING_MONGODB_ROOT_PASSWORD`.
 - **Cloudflare DNS API token**: synced by [environments/dev/cloudflare-api-token-externalsecret.yaml](environments/dev/cloudflare-api-token-externalsecret.yaml) (and prod) for cert-manager DNS-01.
 
 Replace placeholders in [environments/shared/cluster-secret-store.yaml](environments/shared/cluster-secret-store.yaml) for GCP project, region, and cluster name.
