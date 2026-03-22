@@ -10,4 +10,4 @@ patches:
   - path: patch-deployment.yaml
 images:
   - name: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/inventory-service
-    newTag: 5209ad1a16c427f807786c5e39ca6aaf1ce16ddd
+    newTag: b95dbb0342be9d114c45e21756df5a649446d16b
