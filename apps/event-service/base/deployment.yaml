@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-service
+  name: event-service
   labels:
-    app.kubernetes.io/name: user-service
+    app.kubernetes.io/name: event-service
     app.kubernetes.io/component: api
     app.kubernetes.io/part-of: phoenix-platform
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: user-service
+      app.kubernetes.io/name: event-service
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: user-service
+        app.kubernetes.io/name: event-service
         app.kubernetes.io/component: api
         app.kubernetes.io/part-of: phoenix-platform
     spec:
@@ -23,49 +23,49 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
-        - name: user-service
-          image: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/user-service:latest
+        - name: event-service
+          image: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/event-service:latest
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: 8081
               protocol: TCP
           envFrom:
             - configMapRef:
-                name: user-service-config
+                name: event-service-config
           env:
-            - name: DATABASE_URL
+            - name: MONGO_URI
               valueFrom:
                 secretKeyRef:
-                  name: user-service-secrets
-                  key: DATABASE_URL
+                  name: event-service-secrets
+                  key: MONGO_URI
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: user-service-secrets
+                  name: event-service-secrets
                   key: JWT_SECRET
           resources:
             requests:
               cpu: 100m
               memory: 128Mi
             limits:
-              cpu: 250m
-              memory: 256Mi
+              cpu: 500m
+              memory: 512Mi
           readinessProbe:
             httpGet:
-              path: /ready
+              path: /health
               port: http
-            initialDelaySeconds: 5
+            initialDelaySeconds: 15
             periodSeconds: 10
-            timeoutSeconds: 2
+            timeoutSeconds: 3
             failureThreshold: 3
           livenessProbe:
             httpGet:
               path: /health
               port: http
-            initialDelaySeconds: 10
+            initialDelaySeconds: 20
             periodSeconds: 15
-            timeoutSeconds: 2
+            timeoutSeconds: 3
             failureThreshold: 3
           securityContext:
             allowPrivilegeEscalation: false

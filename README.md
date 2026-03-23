@@ -28,6 +28,7 @@ platform-config/
 │   │       └── prod/
 │   ├── booking-service/
 │   ├── payment-service/
+│   ├── event-service/
 │   └── notification-service/
 ├── environments/
 │   ├── shared/          # ClusterSecretStore + cert-manager ClusterIssuers (LE + Cloudflare DNS)
@@ -61,6 +62,7 @@ This starter currently includes working manifests for:
 - `inventory-service`
 - `booking-service`
 - `payment-service`
+- `event-service`
 
 ## TLS and ingress (Gateway API + Cloudflare DNS)
 
@@ -106,7 +108,7 @@ In this starter repo, image tags are set in the overlay `kustomization.yaml` fil
 
 Secret values are not committed to Git.
 
-- **Application secrets** (`DATABASE_URL`, `JWT_SECRET`, `MONGODB_URI`, booking/payment `MONGO_URI` + `JWT_SECRET`, Mongo root passwords for in-cluster DBs): [ExternalSecret](https://external-secrets.io/) manifests in each service overlay sync from **GCP Secret Manager** via `ClusterSecretStore` `phoenix-gcp`. Replace `REPLACE_GSM_*` placeholders in those files with your GSM secret names (use separate secrets per environment in practice). For booking, set `MONGODB_URI` to `booking-service-mongodb`; for payment, set `MONGO_URI` to `payment-service-mongodb` (e.g. `mongodb://root:...@payment-service-mongodb:27017/phoenix_payment_service?authSource=admin`) matching `REPLACE_GSM_PAYMENT_MONGODB_ROOT_PASSWORD`.
+- **Application secrets** (`DATABASE_URL`, `JWT_SECRET`, `MONGODB_URI`, booking/payment/event `MONGO_URI`/`MONGODB_URI` + `JWT_SECRET`, Mongo root passwords for in-cluster DBs): [ExternalSecret](https://external-secrets.io/) manifests in each service overlay sync from **GCP Secret Manager** via `ClusterSecretStore` `phoenix-gcp`. Replace `REPLACE_GSM_*` placeholders in those files with your GSM secret names (use separate secrets per environment in practice). For booking, set `MONGODB_URI` to `booking-service-mongodb`; for payment, set `MONGO_URI` to `payment-service-mongodb`; for event, set `MONGO_URI` to `event-service-mongodb` (e.g. `mongodb://root:...@event-service-mongodb:27017/phoenix_events?authSource=admin`) matching `REPLACE_GSM_EVENT_MONGODB_ROOT_PASSWORD`.
 - **Cloudflare DNS API token**: synced by [environments/dev/cloudflare-api-token-externalsecret.yaml](environments/dev/cloudflare-api-token-externalsecret.yaml) (and prod) for cert-manager DNS-01.
 
 Replace placeholders in [environments/shared/cluster-secret-store.yaml](environments/shared/cluster-secret-store.yaml) for GCP project, region, and cluster name.

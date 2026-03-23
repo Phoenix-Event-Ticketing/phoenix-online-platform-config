@@ -14,7 +14,7 @@ data:
   MONGODB_DATABASE: booking_db
   JWT_ISSUER: phoenix-online-auth
   BOOKING_SERVICE_CALLBACK_BASE_URL: https://api-dev.example.com
-  EVENT_SERVICE_BASE_URL: http://event-service:8081
+  EVENT_SERVICE_BASE_URL: http://event-service:8081/api/v1
   INVENTORY_SERVICE_BASE_URL: http://inventory-service:8080
   PAYMENT_SERVICE_BASE_URL: http://payment-service:8084/api
   INTERNAL_SERVICE_PERMISSIONS_JSON: '{"payment-service":["PAYMENT_CALLBACK"],"inventory-service":["EXPIRE_BOOKING"]}'

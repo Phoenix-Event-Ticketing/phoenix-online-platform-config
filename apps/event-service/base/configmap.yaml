@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: event-service-config
+  labels:
+    app.kubernetes.io/name: event-service
+    app.kubernetes.io/component: api
+    app.kubernetes.io/part-of: phoenix-platform
+data:
+  PORT: "8081"
+  NODE_ENV: development
+  SERVICE_NAME: event-service
+  LOG_LEVEL: info
+  INVENTORY_SERVICE_URL: http://inventory-service:8080

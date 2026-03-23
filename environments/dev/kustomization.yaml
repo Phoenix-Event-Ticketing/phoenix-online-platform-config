@@ -14,5 +14,6 @@ resources:
   - ../../apps/user-service/overlays/dev
   - ../../apps/booking-service/overlays/dev
   - ../../apps/payment-service/overlays/dev
+  - ../../apps/event-service/overlays/dev
   # Add service overlays here as they become available.
   # - ../../apps/notification-service/overlays/dev

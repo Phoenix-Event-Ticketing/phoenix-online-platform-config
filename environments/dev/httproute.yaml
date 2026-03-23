@@ -10,7 +10,7 @@ spec:
     - name: phoenix-dev
       sectionName: https
   hostnames:
-    - api-dev.example.com
+    - api-dev.pheonix-project.online
   rules:
     - matches:
         - path:
@@ -33,6 +33,13 @@ spec:
       backendRefs:
         - name: booking-service
           port: 8080
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api/v1/events
+      backendRefs:
+        - name: event-service
+          port: 8081
     - matches:
         - path:
             type: PathPrefix

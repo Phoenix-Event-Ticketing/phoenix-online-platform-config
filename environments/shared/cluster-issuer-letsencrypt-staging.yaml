@@ -6,7 +6,7 @@ metadata:
   name: letsencrypt-staging
 spec:
   acme:
-    email: REPLACE_ACME_EMAIL
+    email: manilkadikkumbura17@gmail.com
     server: https://acme-staging-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       name: letsencrypt-staging-account-key

@@ -6,9 +6,9 @@ commonLabels:
 resources:
   - ../../base
   - external-secret.yaml
-  - mysql-external-secret.yaml
+  - mongodb-external-secret.yaml
 patches:
   - path: patch-deployment.yaml
 images:
-  - name: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/user-service
-    newTag: dev-123abc
+  - name: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/event-service
+    newTag: dev-latest

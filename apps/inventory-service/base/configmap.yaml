@@ -13,3 +13,4 @@ data:
   SERVICE_NAME: inventory-service
   LOG_LEVEL: info
   HOLD_TTL_MINUTES: "15"
+  SERVICE_REGISTRY: '{"booking-service":["RESERVE_TICKET"],"event-service":["CREATE_TICKET_TYPE","UPDATE_TICKET_INVENTORY","VIEW_TICKET_INVENTORY"]}'
