@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/example-org/platform-config.git
+    repoURL: https://github.com/Phoenix-Event-Ticketing/phoenix-online-platform-config.git
     targetRevision: main
     path: environments/prod
   destination:
