@@ -1,0 +1,1650 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: phoenix-dev
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  labels:
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: phoenix-dev-quota
+  namespace: phoenix-dev
+spec:
+  hard:
+    limits.cpu: "6"
+    limits.memory: 10Gi
+    persistentvolumeclaims: "8"
+    pods: "20"
+    requests.cpu: "3"
+    requests.memory: 5Gi
+    services: "20"
+---
+apiVersion: v1
+data:
+  APP_ENV: dev
+  APP_NAME: phoenix-online-booking-service
+  APP_PORT: "8080"
+  BOOKING_SERVICE_CALLBACK_BASE_URL: https://api-dev.example.com
+  EVENT_SERVICE_BASE_URL: http://event-service:8081/api/v1
+  INTERNAL_SERVICE_PERMISSIONS_JSON: '{"payment-service":["PAYMENT_CALLBACK"],"inventory-service":["EXPIRE_BOOKING"]}'
+  INVENTORY_SERVICE_BASE_URL: http://inventory-service:8080
+  JWT_ISSUER: phoenix-online-auth
+  LOG_LEVEL: INFO
+  MONGODB_DATABASE: booking_db
+  PAYMENT_SERVICE_BASE_URL: http://payment-service:8084/api
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/component: api
+    app.kubernetes.io/name: booking-service
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: booking-service-config
+  namespace: phoenix-dev
+---
+apiVersion: v1
+data:
+  INVENTORY_SERVICE_URL: http://inventory-service:8080
+  LOG_LEVEL: info
+  NODE_ENV: development
+  PORT: "8081"
+  SERVICE_NAME: event-service
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/component: api
+    app.kubernetes.io/name: event-service
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: event-service-config
+  namespace: phoenix-dev
+---
+apiVersion: v1
+data:
+  ENVIRONMENT: development
+  HOLD_TTL_MINUTES: "15"
+  LOG_LEVEL: info
+  MONGODB_DATABASE: phoenix_inventory
+  PORT: "8080"
+  SERVICE_NAME: inventory-service
+  SERVICE_REGISTRY: '{"booking-service":["RESERVE_TICKET"],"event-service":["CREATE_TICKET_TYPE","UPDATE_TICKET_INVENTORY","VIEW_TICKET_INVENTORY"]}'
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/component: api
+    app.kubernetes.io/name: inventory-service
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: inventory-service-config
+  namespace: phoenix-dev
+---
+apiVersion: v1
+data:
+  BOOKING_SERVICE_BASE_URL: http://booking-service:8080
+  CORS_ORIGIN: '*'
+  LOG_LEVEL: info
+  NODE_ENV: development
+  PORT: "8084"
+  USER_SERVICE_BASE_URL: http://user-service:8080
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/component: api
+    app.kubernetes.io/name: payment-service
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: payment-service-config
+  namespace: phoenix-dev
+---
+apiVersion: v1
+data:
+  APP_ENV: default
+  APP_NAME: user-service
+  APP_PORT: "8080"
+  FEATURE_USER_PROFILE_CACHE: "true"
+  LOG_FORMAT: json
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/component: api
+    app.kubernetes.io/name: user-service
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: user-service-config
+  namespace: phoenix-dev
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: api
+    app.kubernetes.io/name: booking-service
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: booking-service
+  namespace: phoenix-dev
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: http
+  selector:
+    app.kubernetes.io/name: booking-service
+    environment: dev
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: database
+    app.kubernetes.io/name: booking-service-mongodb
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: booking-service-mongodb
+  namespace: phoenix-dev
+spec:
+  clusterIP: None
+  ports:
+  - name: mongodb
+    port: 27017
+    protocol: TCP
+    targetPort: mongodb
+  selector:
+    app.kubernetes.io/name: booking-service-mongodb
+    environment: dev
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: api
+    app.kubernetes.io/name: event-service
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: event-service
+  namespace: phoenix-dev
+spec:
+  ports:
+  - name: http
+    port: 8081
+    protocol: TCP
+    targetPort: http
+  selector:
+    app.kubernetes.io/name: event-service
+    environment: dev
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: database
+    app.kubernetes.io/name: event-service-mongodb
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: event-service-mongodb
+  namespace: phoenix-dev
+spec:
+  clusterIP: None
+  ports:
+  - name: mongodb
+    port: 27017
+    protocol: TCP
+    targetPort: mongodb
+  selector:
+    app.kubernetes.io/name: event-service-mongodb
+    environment: dev
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: api
+    app.kubernetes.io/name: inventory-service
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: inventory-service
+  namespace: phoenix-dev
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: http
+  selector:
+    app.kubernetes.io/name: inventory-service
+    environment: dev
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: database
+    app.kubernetes.io/name: inventory-service-mongodb
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: inventory-service-mongodb
+  namespace: phoenix-dev
+spec:
+  clusterIP: None
+  ports:
+  - name: mongodb
+    port: 27017
+    protocol: TCP
+    targetPort: mongodb
+  selector:
+    app.kubernetes.io/name: inventory-service-mongodb
+    environment: dev
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: api
+    app.kubernetes.io/name: payment-service
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: payment-service
+  namespace: phoenix-dev
+spec:
+  ports:
+  - name: http
+    port: 8084
+    protocol: TCP
+    targetPort: http
+  selector:
+    app.kubernetes.io/name: payment-service
+    environment: dev
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: database
+    app.kubernetes.io/name: payment-service-mongodb
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: payment-service-mongodb
+  namespace: phoenix-dev
+spec:
+  clusterIP: None
+  ports:
+  - name: mongodb
+    port: 27017
+    protocol: TCP
+    targetPort: mongodb
+  selector:
+    app.kubernetes.io/name: payment-service-mongodb
+    environment: dev
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: api
+    app.kubernetes.io/name: user-service
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: user-service
+  namespace: phoenix-dev
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: http
+  selector:
+    app.kubernetes.io/name: user-service
+    environment: dev
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: database
+    app.kubernetes.io/name: user-service-mysql
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: user-service-mysql
+  namespace: phoenix-dev
+spec:
+  clusterIP: None
+  ports:
+  - name: mysql
+    port: 3306
+    protocol: TCP
+    targetPort: mysql
+  selector:
+    app.kubernetes.io/name: user-service-mysql
+    environment: dev
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  labels:
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: phoenix-dev-limits
+  namespace: phoenix-dev
+spec:
+  limits:
+  - default:
+      cpu: 250m
+      memory: 256Mi
+    defaultRequest:
+      cpu: 100m
+      memory: 128Mi
+    max:
+      cpu: 500m
+      memory: 512Mi
+    min:
+      cpu: 50m
+      memory: 64Mi
+    type: Container
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: api
+    app.kubernetes.io/name: booking-service
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: booking-service
+  namespace: phoenix-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: booking-service
+      environment: dev
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: api
+        app.kubernetes.io/name: booking-service
+        app.kubernetes.io/part-of: phoenix-platform
+        environment: dev
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - preference:
+              matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                - asia-south1-a
+            weight: 100
+      containers:
+      - env:
+        - name: APP_ENV
+          value: dev
+        - name: LOG_LEVEL
+          value: DEBUG
+        - name: MONGODB_URI
+          valueFrom:
+            secretKeyRef:
+              key: MONGODB_URI
+              name: booking-service-secrets
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: JWT_SECRET
+              name: booking-service-secrets
+        envFrom:
+        - configMapRef:
+            name: booking-service-config
+        image: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/booking-service:dev-latest
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /actuator/health/liveness
+            port: http
+          initialDelaySeconds: 60
+          periodSeconds: 20
+          timeoutSeconds: 3
+        name: booking-service
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /actuator/health/readiness
+            port: http
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 3
+        resources:
+          limits:
+            cpu: 400m
+            memory: 512Mi
+          requests:
+            cpu: 75m
+            memory: 256Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: api
+    app.kubernetes.io/name: event-service
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: event-service
+  namespace: phoenix-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: event-service
+      environment: dev
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: api
+        app.kubernetes.io/name: event-service
+        app.kubernetes.io/part-of: phoenix-platform
+        environment: dev
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - preference:
+              matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                - asia-south1-a
+            weight: 100
+      containers:
+      - env:
+        - name: NODE_ENV
+          value: development
+        - name: LOG_LEVEL
+          value: debug
+        - name: MONGO_URI
+          valueFrom:
+            secretKeyRef:
+              key: MONGO_URI
+              name: event-service-secrets
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: JWT_SECRET
+              name: event-service-secrets
+        envFrom:
+        - configMapRef:
+            name: event-service-config
+        image: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/event-service:dev-latest
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          timeoutSeconds: 3
+        name: event-service
+        ports:
+        - containerPort: 8081
+          name: http
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 3
+        resources:
+          limits:
+            cpu: 400m
+            memory: 512Mi
+          requests:
+            cpu: 75m
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: api
+    app.kubernetes.io/name: inventory-service
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: inventory-service
+  namespace: phoenix-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: inventory-service
+      environment: dev
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: api
+        app.kubernetes.io/name: inventory-service
+        app.kubernetes.io/part-of: phoenix-platform
+        environment: dev
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - preference:
+              matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                - asia-south1-a
+            weight: 100
+      containers:
+      - env:
+        - name: ENVIRONMENT
+          value: development
+        - name: LOG_LEVEL
+          value: debug
+        - name: MONGODB_URI
+          valueFrom:
+            secretKeyRef:
+              key: MONGODB_URI
+              name: inventory-service-secrets
+        envFrom:
+        - configMapRef:
+            name: inventory-service-config
+        image: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/inventory-service:b95dbb0342be9d114c45e21756df5a649446d16b
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          timeoutSeconds: 2
+        name: inventory-service
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 2
+        resources:
+          limits:
+            cpu: 200m
+            memory: 256Mi
+          requests:
+            cpu: 75m
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: api
+    app.kubernetes.io/name: payment-service
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: payment-service
+  namespace: phoenix-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: payment-service
+      environment: dev
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: api
+        app.kubernetes.io/name: payment-service
+        app.kubernetes.io/part-of: phoenix-platform
+        environment: dev
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - preference:
+              matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                - asia-south1-a
+            weight: 100
+      containers:
+      - env:
+        - name: NODE_ENV
+          value: development
+        - name: LOG_LEVEL
+          value: debug
+        - name: MONGO_URI
+          valueFrom:
+            secretKeyRef:
+              key: MONGO_URI
+              name: payment-service-secrets
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: JWT_SECRET
+              name: payment-service-secrets
+        envFrom:
+        - configMapRef:
+            name: payment-service-config
+        image: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/payment-service:dev-latest
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          timeoutSeconds: 3
+        name: payment-service
+        ports:
+        - containerPort: 8084
+          name: http
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /ready
+            port: http
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 3
+        resources:
+          limits:
+            cpu: 400m
+            memory: 512Mi
+          requests:
+            cpu: 75m
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: api
+    app.kubernetes.io/name: user-service
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: user-service
+  namespace: phoenix-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: user-service
+      environment: dev
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: api
+        app.kubernetes.io/name: user-service
+        app.kubernetes.io/part-of: phoenix-platform
+        environment: dev
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - preference:
+              matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                - asia-south1-a
+            weight: 100
+      containers:
+      - env:
+        - name: APP_ENV
+          value: dev
+        - name: LOG_LEVEL
+          value: DEBUG
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              key: DATABASE_URL
+              name: user-service-secrets
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: JWT_SECRET
+              name: user-service-secrets
+        envFrom:
+        - configMapRef:
+            name: user-service-config
+        image: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/user-service:dev-123abc
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          timeoutSeconds: 2
+        name: user-service
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /ready
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 2
+        resources:
+          limits:
+            cpu: 200m
+            memory: 192Mi
+          requests:
+            cpu: 50m
+            memory: 96Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/component: database
+    app.kubernetes.io/name: booking-service-mongodb
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: booking-service-mongodb
+  namespace: phoenix-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: booking-service-mongodb
+      environment: dev
+  serviceName: booking-service-mongodb
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: database
+        app.kubernetes.io/name: booking-service-mongodb
+        app.kubernetes.io/part-of: phoenix-platform
+        environment: dev
+    spec:
+      containers:
+      - env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value: root
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: MONGO_INITDB_ROOT_PASSWORD
+              name: booking-service-mongodb-secrets
+        - name: MONGO_INITDB_DATABASE
+          value: booking_db
+        image: mongo:7.0
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          initialDelaySeconds: 45
+          periodSeconds: 20
+          tcpSocket:
+            port: mongodb
+          timeoutSeconds: 5
+        name: mongodb
+        ports:
+        - containerPort: 27017
+          name: mongodb
+          protocol: TCP
+        readinessProbe:
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          tcpSocket:
+            port: mongodb
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 250m
+            memory: 256Mi
+          requests:
+            cpu: 125m
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          runAsGroup: 999
+          runAsNonRoot: true
+          runAsUser: 999
+        volumeMounts:
+        - mountPath: /data/db
+          name: data
+      securityContext:
+        fsGroup: 999
+        seccompProfile:
+          type: RuntimeDefault
+  volumeClaimTemplates:
+  - metadata:
+      labels:
+        environment: dev
+      name: data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi
+      storageClassName: standard
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/component: database
+    app.kubernetes.io/name: event-service-mongodb
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: event-service-mongodb
+  namespace: phoenix-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: event-service-mongodb
+      environment: dev
+  serviceName: event-service-mongodb
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: database
+        app.kubernetes.io/name: event-service-mongodb
+        app.kubernetes.io/part-of: phoenix-platform
+        environment: dev
+    spec:
+      containers:
+      - env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value: root
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: MONGO_INITDB_ROOT_PASSWORD
+              name: event-service-mongodb-secrets
+        - name: MONGO_INITDB_DATABASE
+          value: phoenix_events
+        image: mongo:7.0
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          initialDelaySeconds: 45
+          periodSeconds: 20
+          tcpSocket:
+            port: mongodb
+          timeoutSeconds: 5
+        name: mongodb
+        ports:
+        - containerPort: 27017
+          name: mongodb
+          protocol: TCP
+        readinessProbe:
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          tcpSocket:
+            port: mongodb
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 250m
+            memory: 256Mi
+          requests:
+            cpu: 125m
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          runAsGroup: 999
+          runAsNonRoot: true
+          runAsUser: 999
+        volumeMounts:
+        - mountPath: /data/db
+          name: data
+      securityContext:
+        fsGroup: 999
+        seccompProfile:
+          type: RuntimeDefault
+  volumeClaimTemplates:
+  - metadata:
+      labels:
+        environment: dev
+      name: data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi
+      storageClassName: standard
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/component: database
+    app.kubernetes.io/name: inventory-service-mongodb
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: inventory-service-mongodb
+  namespace: phoenix-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: inventory-service-mongodb
+      environment: dev
+  serviceName: inventory-service-mongodb
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: database
+        app.kubernetes.io/name: inventory-service-mongodb
+        app.kubernetes.io/part-of: phoenix-platform
+        environment: dev
+    spec:
+      containers:
+      - env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value: root
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: MONGO_INITDB_ROOT_PASSWORD
+              name: inventory-service-mongodb-secrets
+        - name: MONGO_INITDB_DATABASE
+          value: phoenix_inventory
+        image: mongo:7.0
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          initialDelaySeconds: 45
+          periodSeconds: 20
+          tcpSocket:
+            port: mongodb
+          timeoutSeconds: 5
+        name: mongodb
+        ports:
+        - containerPort: 27017
+          name: mongodb
+          protocol: TCP
+        readinessProbe:
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          tcpSocket:
+            port: mongodb
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 250m
+            memory: 256Mi
+          requests:
+            cpu: 125m
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          runAsGroup: 999
+          runAsNonRoot: true
+          runAsUser: 999
+        volumeMounts:
+        - mountPath: /data/db
+          name: data
+      securityContext:
+        fsGroup: 999
+        seccompProfile:
+          type: RuntimeDefault
+  volumeClaimTemplates:
+  - metadata:
+      labels:
+        environment: dev
+      name: data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi
+      storageClassName: standard
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/component: database
+    app.kubernetes.io/name: payment-service-mongodb
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: payment-service-mongodb
+  namespace: phoenix-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: payment-service-mongodb
+      environment: dev
+  serviceName: payment-service-mongodb
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: database
+        app.kubernetes.io/name: payment-service-mongodb
+        app.kubernetes.io/part-of: phoenix-platform
+        environment: dev
+    spec:
+      containers:
+      - env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value: root
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: MONGO_INITDB_ROOT_PASSWORD
+              name: payment-service-mongodb-secrets
+        - name: MONGO_INITDB_DATABASE
+          value: phoenix_payment_service
+        image: mongo:7.0
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          initialDelaySeconds: 45
+          periodSeconds: 20
+          tcpSocket:
+            port: mongodb
+          timeoutSeconds: 5
+        name: mongodb
+        ports:
+        - containerPort: 27017
+          name: mongodb
+          protocol: TCP
+        readinessProbe:
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          tcpSocket:
+            port: mongodb
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 250m
+            memory: 256Mi
+          requests:
+            cpu: 125m
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          runAsGroup: 999
+          runAsNonRoot: true
+          runAsUser: 999
+        volumeMounts:
+        - mountPath: /data/db
+          name: data
+      securityContext:
+        fsGroup: 999
+        seccompProfile:
+          type: RuntimeDefault
+  volumeClaimTemplates:
+  - metadata:
+      labels:
+        environment: dev
+      name: data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi
+      storageClassName: standard
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/component: database
+    app.kubernetes.io/name: user-service-mysql
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: user-service-mysql
+  namespace: phoenix-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: user-service-mysql
+      environment: dev
+  serviceName: user-service-mysql
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: database
+        app.kubernetes.io/name: user-service-mysql
+        app.kubernetes.io/part-of: phoenix-platform
+        environment: dev
+    spec:
+      containers:
+      - env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: MYSQL_ROOT_PASSWORD
+              name: user-service-mysql-secrets
+        - name: MYSQL_DATABASE
+          value: phoenix_users
+        image: mysql:8.0
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          initialDelaySeconds: 45
+          periodSeconds: 20
+          tcpSocket:
+            port: mysql
+          timeoutSeconds: 5
+        name: mysql
+        ports:
+        - containerPort: 3306
+          name: mysql
+          protocol: TCP
+        readinessProbe:
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          tcpSocket:
+            port: mysql
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 250m
+            memory: 256Mi
+          requests:
+            cpu: 125m
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: data
+      securityContext:
+        fsGroup: 999
+        seccompProfile:
+          type: RuntimeDefault
+  volumeClaimTemplates:
+  - metadata:
+      labels:
+        environment: dev
+      name: data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi
+      storageClassName: standard
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: phoenix-dev-gateway-tls
+  namespace: phoenix-dev
+spec:
+  dnsNames:
+  - api-dev.phoenix-project.online
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-staging
+  secretName: phoenix-dev-gateway-tls
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+  namespace: phoenix-dev
+spec:
+  acme:
+    email: manilkadikkumbura17@gmail.com
+    privateKeySecretRef:
+      name: letsencrypt-prod-account-key
+    server: https://acme-v02.api.letsencrypt.org/directory
+    solvers:
+    - dns01:
+        cloudflare:
+          apiTokenSecretRef:
+            key: api-token
+            name: cloudflare-api-token
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-staging
+  namespace: phoenix-dev
+spec:
+  acme:
+    email: manilkadikkumbura17@gmail.com
+    privateKeySecretRef:
+      name: letsencrypt-staging-account-key
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    solvers:
+    - dns01:
+        cloudflare:
+          apiTokenSecretRef:
+            key: api-token
+            name: cloudflare-api-token
+---
+apiVersion: external-secrets.io/v1
+kind: ClusterSecretStore
+metadata:
+  name: phoenix-gcp
+  namespace: phoenix-dev
+spec:
+  provider:
+    gcpsm:
+      auth:
+        workloadIdentity:
+          clusterLocation: asia-south1
+          clusterName: phoenix-event-cluster
+          serviceAccountRef:
+            name: external-secrets
+            namespace: external-secrets-system
+      projectID: phoenix-event-booking
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  labels:
+    environment: dev
+  name: booking-service-mongodb-secrets
+  namespace: phoenix-dev
+spec:
+  data:
+  - remoteRef:
+      key: mongo-root-passwd
+    secretKey: MONGO_INITDB_ROOT_PASSWORD
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: phoenix-gcp
+  target:
+    creationPolicy: Owner
+    name: booking-service-mongodb-secrets
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  labels:
+    environment: dev
+  name: booking-service-secrets
+  namespace: phoenix-dev
+spec:
+  data:
+  - remoteRef:
+      key: mongo-booking-uri
+    secretKey: MONGODB_URI
+  - remoteRef:
+      key: dev-jwt-secret
+    secretKey: JWT_SECRET
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: phoenix-gcp
+  target:
+    creationPolicy: Owner
+    name: booking-service-secrets
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: cloudflare-api-token
+  namespace: phoenix-dev
+spec:
+  data:
+  - remoteRef:
+      key: cloudflare-dns-api-token
+    secretKey: api-token
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: phoenix-gcp
+  target:
+    creationPolicy: Owner
+    name: cloudflare-api-token
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  labels:
+    environment: dev
+  name: event-service-mongodb-secrets
+  namespace: phoenix-dev
+spec:
+  data:
+  - remoteRef:
+      key: mongo-root-passwd
+    secretKey: MONGO_INITDB_ROOT_PASSWORD
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: phoenix-gcp
+  target:
+    creationPolicy: Owner
+    name: event-service-mongodb-secrets
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  labels:
+    environment: dev
+  name: event-service-secrets
+  namespace: phoenix-dev
+spec:
+  data:
+  - remoteRef:
+      key: event-mongo-uri
+    secretKey: MONGO_URI
+  - remoteRef:
+      key: dev-jwt-secret
+    secretKey: JWT_SECRET
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: phoenix-gcp
+  target:
+    creationPolicy: Owner
+    name: event-service-secrets
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  labels:
+    environment: dev
+  name: inventory-service-mongodb-secrets
+  namespace: phoenix-dev
+spec:
+  data:
+  - remoteRef:
+      key: mongo-root-passwd
+    secretKey: MONGO_INITDB_ROOT_PASSWORD
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: phoenix-gcp
+  target:
+    creationPolicy: Owner
+    name: inventory-service-mongodb-secrets
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  labels:
+    environment: dev
+  name: inventory-service-secrets
+  namespace: phoenix-dev
+spec:
+  data:
+  - remoteRef:
+      key: inventory_mongo_uri
+    secretKey: MONGODB_URI
+  - remoteRef:
+      key: dev-jwt-secret
+    secretKey: JWT_SECRET
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: phoenix-gcp
+  target:
+    creationPolicy: Owner
+    name: inventory-service-secrets
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  labels:
+    environment: dev
+  name: payment-service-mongodb-secrets
+  namespace: phoenix-dev
+spec:
+  data:
+  - remoteRef:
+      key: mongo-root-passwd
+    secretKey: MONGO_INITDB_ROOT_PASSWORD
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: phoenix-gcp
+  target:
+    creationPolicy: Owner
+    name: payment-service-mongodb-secrets
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  labels:
+    environment: dev
+  name: payment-service-secrets
+  namespace: phoenix-dev
+spec:
+  data:
+  - remoteRef:
+      key: payment-mongo-uri
+    secretKey: MONGO_URI
+  - remoteRef:
+      key: dev-jwt-secret
+    secretKey: JWT_SECRET
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: phoenix-gcp
+  target:
+    creationPolicy: Owner
+    name: payment-service-secrets
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  labels:
+    environment: dev
+  name: user-service-mysql-secrets
+  namespace: phoenix-dev
+spec:
+  data:
+  - remoteRef:
+      key: user-service-mysql-password
+    secretKey: MYSQL_ROOT_PASSWORD
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: phoenix-gcp
+  target:
+    creationPolicy: Owner
+    name: user-service-mysql-secrets
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  labels:
+    environment: dev
+  name: user-service-secrets
+  namespace: phoenix-dev
+spec:
+  data:
+  - remoteRef:
+      key: user-service-db-url
+    secretKey: DATABASE_URL
+  - remoteRef:
+      key: dev-jwt-secret
+    secretKey: JWT_SECRET
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: phoenix-gcp
+  target:
+    creationPolicy: Owner
+    name: user-service-secrets
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  labels:
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: phoenix-dev
+  namespace: phoenix-dev
+spec:
+  gatewayClassName: gke-l7-global-external-managed
+  listeners:
+  - allowedRoutes:
+      namespaces:
+        from: Same
+    hostname: api-dev.phoenix-project.online
+    name: https
+    port: 443
+    protocol: HTTPS
+    tls:
+      certificateRefs:
+      - group: ""
+        kind: Secret
+        name: phoenix-dev-gateway-tls
+      mode: Terminate
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  labels:
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+  name: phoenix-api
+  namespace: phoenix-dev
+spec:
+  hostnames:
+  - api-dev.phoenix-project.online
+  parentRefs:
+  - name: phoenix-dev
+    sectionName: https
+  rules:
+  - backendRefs:
+    - name: inventory-service
+      port: 8080
+    matches:
+    - path:
+        type: PathPrefix
+        value: /inventory
+  - backendRefs:
+    - name: user-service
+      port: 8080
+    matches:
+    - path:
+        type: PathPrefix
+        value: /users
+  - backendRefs:
+    - name: booking-service
+      port: 8080
+    matches:
+    - path:
+        type: PathPrefix
+        value: /bookings
+  - backendRefs:
+    - name: event-service
+      port: 8081
+    matches:
+    - path:
+        type: PathPrefix
+        value: /api/v1/events
+  - backendRefs:
+    - name: payment-service
+      port: 8084
+    matches:
+    - path:
+        type: PathPrefix
+        value: /api/payments
+  - backendRefs:
+    - name: payment-service
+      port: 8084
+    matches:
+    - path:
+        type: PathPrefix
+        value: /api/refunds
