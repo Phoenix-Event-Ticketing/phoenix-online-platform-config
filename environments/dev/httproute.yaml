@@ -10,7 +10,7 @@ spec:
     - name: phoenix-dev
       sectionName: https
   hostnames:
-    - api-dev.pheonix-project.online
+    - api-dev.phoenix-project.online
   rules:
     - matches:
         - path:

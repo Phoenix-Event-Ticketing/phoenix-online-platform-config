@@ -6,7 +6,7 @@ metadata:
 spec:
   secretName: phoenix-dev-gateway-tls
   dnsNames:
-    - api-dev.example.com
+    - api-dev.phoenix-project.online
   issuerRef:
     name: letsencrypt-staging
     kind: ClusterIssuer

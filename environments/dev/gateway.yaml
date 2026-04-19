@@ -13,7 +13,7 @@ spec:
     - name: https
       protocol: HTTPS
       port: 443
-      hostname: api-dev.pheonix-project.online
+      hostname: api-dev.phoenix-project.online
       allowedRoutes:
         namespaces:
           from: Same

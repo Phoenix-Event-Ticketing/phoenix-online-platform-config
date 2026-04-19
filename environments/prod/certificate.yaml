@@ -5,7 +5,7 @@ metadata:
 spec:
   secretName: phoenix-prod-gateway-tls
   dnsNames:
-    - api.example.com
+    - api.phoenix-project.online
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
