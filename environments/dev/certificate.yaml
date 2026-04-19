@@ -10,7 +10,3 @@ spec:
   issuerRef:
     name: letsencrypt-staging
     kind: ClusterIssuer
-  targetRef:
-    name: phoenix-dev
-    kind: Gateway
-    group: gateway.networking.k8s.io

@@ -9,7 +9,3 @@ spec:
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
-  targetRef:
-    name: phoenix-prod
-    kind: Gateway
-    group: gateway.networking.k8s.io
