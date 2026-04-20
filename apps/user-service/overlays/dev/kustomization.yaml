@@ -12,4 +12,4 @@ patches:
   - path: patch-mysql-storage.yaml
 images:
   - name: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/user-service
-    newTag: e9dc3f54ca6f6bfe94ce17c6b5a51f8160a9087f
+    newTag: 4cb2474efa252db609ccc6d27c36a836dbda5f7e
