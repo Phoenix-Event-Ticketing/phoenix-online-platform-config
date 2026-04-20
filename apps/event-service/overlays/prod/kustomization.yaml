@@ -11,4 +11,4 @@ patches:
   - path: patch-deployment.yaml
 images:
   - name: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/event-service
-    newTag: v1.0.0
+    newTag: fe4269df52921d8341be3035b313cc5ee0146752
