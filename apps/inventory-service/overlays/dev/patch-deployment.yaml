@@ -28,6 +28,11 @@ spec:
               value: development
             - name: LOG_LEVEL
               value: debug
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: inventory-service-secrets
+                  key: JWT_SECRET
           resources:
             requests:
               cpu: 75m

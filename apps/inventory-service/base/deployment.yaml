@@ -39,6 +39,11 @@ spec:
                 secretKeyRef:
                   name: inventory-service-secrets
                   key: MONGODB_URI
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: inventory-service-secrets
+                  key: JWT_SECRET
           resources:
             requests:
               cpu: 100m
