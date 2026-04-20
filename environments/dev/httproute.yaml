@@ -25,14 +25,14 @@ spec:
             value: /users
       backendRefs:
         - name: user-service
-          port: 8080
+          port: 3000
     - matches:
         - path:
             type: PathPrefix
             value: /bookings
       backendRefs:
         - name: booking-service
-          port: 8080
+          port: 8083
     - matches:
         - path:
             type: PathPrefix
@@ -46,11 +46,11 @@ spec:
             value: /api/payments
       backendRefs:
         - name: payment-service
-          port: 8084
+          port: 4002
     - matches:
         - path:
             type: PathPrefix
             value: /api/refunds
       backendRefs:
         - name: payment-service
-          port: 8084
+          port: 4002

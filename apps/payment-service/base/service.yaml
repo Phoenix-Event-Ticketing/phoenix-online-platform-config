@@ -12,6 +12,6 @@ spec:
     app.kubernetes.io/name: payment-service
   ports:
     - name: http
-      port: 8084
+      port: 4002
       targetPort: http
       protocol: TCP

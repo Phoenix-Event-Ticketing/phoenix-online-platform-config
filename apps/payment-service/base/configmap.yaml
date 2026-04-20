@@ -7,9 +7,9 @@ metadata:
     app.kubernetes.io/component: api
     app.kubernetes.io/part-of: phoenix-platform
 data:
-  PORT: "8084"
+  PORT: "4002"
   NODE_ENV: development
   LOG_LEVEL: info
-  BOOKING_SERVICE_BASE_URL: http://booking-service:8080
-  USER_SERVICE_BASE_URL: http://user-service:8080
+  BOOKING_SERVICE_BASE_URL: http://booking-service:8083
+  USER_SERVICE_BASE_URL: http://user-service:3000
   CORS_ORIGIN: "*"

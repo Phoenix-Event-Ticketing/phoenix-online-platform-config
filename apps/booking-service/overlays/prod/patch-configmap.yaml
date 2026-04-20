@@ -4,4 +4,4 @@ metadata:
   name: booking-service-config
 data:
   APP_ENV: prod
-  BOOKING_SERVICE_CALLBACK_BASE_URL: https://api.example.com
+  BOOKING_SERVICE_CALLBACK_BASE_URL: https://api.phoenix-project.online

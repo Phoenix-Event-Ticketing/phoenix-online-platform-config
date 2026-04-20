@@ -8,13 +8,13 @@ metadata:
     app.kubernetes.io/part-of: phoenix-platform
 data:
   APP_NAME: phoenix-online-booking-service
-  APP_PORT: "8080"
+  APP_PORT: "8083"
   APP_ENV: dev
   LOG_LEVEL: INFO
   MONGODB_DATABASE: booking_db
   JWT_ISSUER: phoenix-online-auth
-  BOOKING_SERVICE_CALLBACK_BASE_URL: https://api-dev.example.com
+  BOOKING_SERVICE_CALLBACK_BASE_URL: https://api-dev.phoenix-project.online
   EVENT_SERVICE_BASE_URL: http://event-service:8081/api/v1
   INVENTORY_SERVICE_BASE_URL: http://inventory-service:8080
-  PAYMENT_SERVICE_BASE_URL: http://payment-service:8084/api
+  PAYMENT_SERVICE_BASE_URL: http://payment-service:4002/api
   INTERNAL_SERVICE_PERMISSIONS_JSON: '{"payment-service":["PAYMENT_CALLBACK"],"inventory-service":["EXPIRE_BOOKING"]}'

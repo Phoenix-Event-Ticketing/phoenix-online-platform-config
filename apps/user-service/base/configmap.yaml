@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/part-of: phoenix-platform
 data:
   APP_NAME: user-service
-  APP_PORT: "8080"
+  APP_PORT: "3000"
   APP_ENV: default
   LOG_FORMAT: json
   FEATURE_USER_PROFILE_CACHE: "true"

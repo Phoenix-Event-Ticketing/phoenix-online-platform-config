@@ -28,15 +28,15 @@ apiVersion: v1
 data:
   APP_ENV: dev
   APP_NAME: phoenix-online-booking-service
-  APP_PORT: "8080"
-  BOOKING_SERVICE_CALLBACK_BASE_URL: https://api-dev.example.com
+  APP_PORT: "8083"
+  BOOKING_SERVICE_CALLBACK_BASE_URL: https://api-dev.phoenix-project.online
   EVENT_SERVICE_BASE_URL: http://event-service:8081/api/v1
   INTERNAL_SERVICE_PERMISSIONS_JSON: '{"payment-service":["PAYMENT_CALLBACK"],"inventory-service":["EXPIRE_BOOKING"]}'
   INVENTORY_SERVICE_BASE_URL: http://inventory-service:8080
   JWT_ISSUER: phoenix-online-auth
   LOG_LEVEL: INFO
   MONGODB_DATABASE: booking_db
-  PAYMENT_SERVICE_BASE_URL: http://payment-service:8084/api
+  PAYMENT_SERVICE_BASE_URL: http://payment-service:4002/api
 kind: ConfigMap
 metadata:
   labels:
@@ -85,12 +85,12 @@ metadata:
 ---
 apiVersion: v1
 data:
-  BOOKING_SERVICE_BASE_URL: http://booking-service:8080
+  BOOKING_SERVICE_BASE_URL: http://booking-service:8083
   CORS_ORIGIN: '*'
   LOG_LEVEL: info
   NODE_ENV: development
-  PORT: "8084"
-  USER_SERVICE_BASE_URL: http://user-service:8080
+  PORT: "4002"
+  USER_SERVICE_BASE_URL: http://user-service:3000
 kind: ConfigMap
 metadata:
   labels:
@@ -105,7 +105,7 @@ apiVersion: v1
 data:
   APP_ENV: default
   APP_NAME: user-service
-  APP_PORT: "8080"
+  APP_PORT: "3000"
   FEATURE_USER_PROFILE_CACHE: "true"
   LOG_FORMAT: json
 kind: ConfigMap
@@ -131,7 +131,7 @@ metadata:
 spec:
   ports:
   - name: http
-    port: 8080
+    port: 8083
     protocol: TCP
     targetPort: http
   selector:
@@ -257,7 +257,7 @@ metadata:
 spec:
   ports:
   - name: http
-    port: 8084
+    port: 4002
     protocol: TCP
     targetPort: http
   selector:
@@ -299,7 +299,7 @@ metadata:
 spec:
   ports:
   - name: http
-    port: 8080
+    port: 3000
     protocol: TCP
     targetPort: http
   selector:
@@ -419,7 +419,7 @@ spec:
           timeoutSeconds: 3
         name: booking-service
         ports:
-        - containerPort: 8080
+        - containerPort: 8083
           name: http
           protocol: TCP
         readinessProbe:
@@ -699,7 +699,7 @@ spec:
           timeoutSeconds: 3
         name: payment-service
         ports:
-        - containerPort: 8084
+        - containerPort: 4002
           name: http
           protocol: TCP
         readinessProbe:
@@ -794,7 +794,7 @@ spec:
           timeoutSeconds: 2
         name: user-service
         ports:
-        - containerPort: 8080
+        - containerPort: 3000
           name: http
           protocol: TCP
         readinessProbe:
@@ -1615,14 +1615,14 @@ spec:
         value: /inventory
   - backendRefs:
     - name: user-service
-      port: 8080
+      port: 3000
     matches:
     - path:
         type: PathPrefix
         value: /users
   - backendRefs:
     - name: booking-service
-      port: 8080
+      port: 8083
     matches:
     - path:
         type: PathPrefix
@@ -1636,14 +1636,14 @@ spec:
         value: /api/v1/events
   - backendRefs:
     - name: payment-service
-      port: 8084
+      port: 4002
     matches:
     - path:
         type: PathPrefix
         value: /api/payments
   - backendRefs:
     - name: payment-service
-      port: 8084
+      port: 4002
     matches:
     - path:
         type: PathPrefix

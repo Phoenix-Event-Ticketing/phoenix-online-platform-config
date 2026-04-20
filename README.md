@@ -76,7 +76,7 @@ Requirements on the cluster (install outside this repo or via a platform Helm re
 
 Operational checklist:
 
-1. Create a **Cloudflare API token** with DNS edit rights for the zone that contains `api-dev.example.com` / `api.example.com`.
+1. Create a **Cloudflare API token** with DNS edit rights for the zone that contains `api-dev.phoenix-project.online` / `api.phoenix-project.online`.
 2. Store that token in **GCP Secret Manager** and set `remoteRef.key` in [environments/dev/cloudflare-api-token-externalsecret.yaml](environments/dev/cloudflare-api-token-externalsecret.yaml) (and prod) to the GSM secret id.
 3. Point DNS for those hostnames at Cloudflare and route to the GKE Gateway load balancer (orange-cloud or grey-cloud per your design; DNS-01 only needs Cloudflare to serve the zone).
 4. Replace `REPLACE_ACME_EMAIL` in [environments/shared/cluster-issuer-letsencrypt-staging.yaml](environments/shared/cluster-issuer-letsencrypt-staging.yaml) and [cluster-issuer-letsencrypt-prod.yaml](environments/shared/cluster-issuer-letsencrypt-prod.yaml).

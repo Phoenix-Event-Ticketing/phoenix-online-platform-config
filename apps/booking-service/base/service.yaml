@@ -12,6 +12,6 @@ spec:
     app.kubernetes.io/name: booking-service
   ports:
     - name: http
-      port: 8080
+      port: 8083
       targetPort: http
       protocol: TCP
