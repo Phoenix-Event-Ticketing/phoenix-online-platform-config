@@ -39,6 +39,16 @@ spec:
                   key: MYSQL_ROOT_PASSWORD
             - name: MYSQL_DATABASE
               value: phoenix_users
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-mysql-secrets
+                  key: MYSQL_APP_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-mysql-secrets
+                  key: MYSQL_APP_PASSWORD
           volumeMounts:
             - name: data
               mountPath: /var/lib/mysql
