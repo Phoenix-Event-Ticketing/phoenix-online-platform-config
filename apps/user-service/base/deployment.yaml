@@ -24,7 +24,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: user-service
-          image: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/user-service:latest
+          image: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/user-service:fb78294
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -34,6 +34,8 @@ spec:
             - configMapRef:
                 name: user-service-config
           env:
+            - name: PORT
+              value: "3000"
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
