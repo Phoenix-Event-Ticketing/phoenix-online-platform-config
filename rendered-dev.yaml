@@ -1640,11 +1640,11 @@ spec:
     matches:
     - path:
         type: PathPrefix
-        value: /api/payments
+        value: /payments
   - backendRefs:
     - name: payment-service
       port: 4002
     matches:
     - path:
         type: PathPrefix
-        value: /api/refunds
+        value: /refunds
