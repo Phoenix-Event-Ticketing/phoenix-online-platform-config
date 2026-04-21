@@ -9,6 +9,7 @@ spec:
       labels:
         environment: prod
     spec:
+      automountServiceAccountToken: false
       containers:
         - name: user-service
           env:
@@ -16,10 +17,14 @@ spec:
               value: prod
             - name: LOG_LEVEL
               value: INFO
+            - name: MIGRATE_ON_START
+              value: "true"
           resources:
             requests:
               cpu: 50m
               memory: 96Mi
+              ephemeral-storage: 64Mi
             limits:
               cpu: 200m
               memory: 192Mi
+              ephemeral-storage: 128Mi
