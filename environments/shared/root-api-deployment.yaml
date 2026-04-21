@@ -18,6 +18,7 @@ spec:
         app.kubernetes.io/component: gateway-root
         app.kubernetes.io/part-of: phoenix-platform
     spec:
+      automountServiceAccountToken: false
       securityContext:
         seccompProfile:
           type: RuntimeDefault
@@ -46,10 +47,12 @@ spec:
           resources:
             requests:
               cpu: 25m
-              memory: 32Mi
+              memory: 64Mi
+              ephemeral-storage: 32Mi
             limits:
               cpu: 100m
-              memory: 64Mi
+              memory: 128Mi
+              ephemeral-storage: 64Mi
           securityContext:
             allowPrivilegeEscalation: false
             runAsNonRoot: true
