@@ -7,8 +7,6 @@ resources:
   - gateway.yaml
   - httproute.yaml
   - httproute-http-redirect.yaml
-  - booking-healthcheckpolicy.yaml
-  - payment-healthcheckpolicy.yaml
   - cloudflare-api-token-externalsecret.yaml
   - certificate.yaml
   - resourcequota.yaml

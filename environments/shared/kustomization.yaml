@@ -4,3 +4,6 @@ resources:
   - cluster-secret-store.yaml
   - cluster-issuer-letsencrypt-staging.yaml
   - cluster-issuer-letsencrypt-prod.yaml
+  - root-api-deployment.yaml
+  - root-api-service.yaml
+  - root-api-healthcheckpolicy.yaml

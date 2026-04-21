@@ -9,6 +9,7 @@ resources:
   - mongodb-external-secret.yaml
 patches:
   - path: patch-deployment.yaml
+  - path: patch-mongodb-storage.yaml
 images:
   - name: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/payment-service
     newTag: 81e79d1f3a4927e855a90ef015a221f3c2f0a923

@@ -6,6 +6,7 @@ resources:
   - namespace.yaml
   - gateway.yaml
   - httproute.yaml
+  - httproute-http-redirect.yaml
   - cloudflare-api-token-externalsecret.yaml
   - certificate.yaml
   - resourcequota.yaml

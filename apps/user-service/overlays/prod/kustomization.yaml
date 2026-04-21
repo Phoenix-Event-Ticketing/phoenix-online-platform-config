@@ -9,6 +9,7 @@ resources:
   - mysql-external-secret.yaml
 patches:
   - path: patch-deployment.yaml
+  - path: patch-mysql-storage.yaml
 images:
   - name: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/user-service
     newTag: fb78294

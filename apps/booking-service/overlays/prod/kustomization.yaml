@@ -10,6 +10,7 @@ resources:
 patches:
   - path: patch-deployment.yaml
   - path: patch-configmap.yaml
+  - path: patch-mongodb-storage.yaml
 images:
   - name: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/booking-service
     newTag: v1.0.0

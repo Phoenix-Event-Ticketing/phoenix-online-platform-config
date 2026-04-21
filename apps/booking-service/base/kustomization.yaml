@@ -4,5 +4,6 @@ resources:
   - deployment.yaml
   - service.yaml
   - configmap.yaml
+  - healthcheckpolicy.yaml
   - mongodb-service.yaml
   - mongodb-statefulset.yaml
