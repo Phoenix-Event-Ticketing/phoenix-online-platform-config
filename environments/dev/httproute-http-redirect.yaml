@@ -1,0 +1,23 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: phoenix-api-http-redirect
+  labels:
+    app.kubernetes.io/part-of: phoenix-platform
+    environment: dev
+spec:
+  parentRefs:
+    - name: phoenix-dev
+      sectionName: http
+  hostnames:
+    - api-dev.phoenix-project.online
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            statusCode: 301

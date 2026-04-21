@@ -54,3 +54,10 @@ spec:
       backendRefs:
         - name: payment-service
           port: 4002
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: user-service
+          port: 3000

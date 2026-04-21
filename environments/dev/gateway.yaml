@@ -10,6 +10,13 @@ metadata:
 spec:
   gatewayClassName: gke-l7-global-external-managed
   listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      hostname: api-dev.phoenix-project.online
+      allowedRoutes:
+        namespaces:
+          from: Same
     - name: https
       protocol: HTTPS
       port: 443

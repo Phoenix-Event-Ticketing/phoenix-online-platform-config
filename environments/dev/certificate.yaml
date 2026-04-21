@@ -8,5 +8,5 @@ spec:
   dnsNames:
     - api-dev.phoenix-project.online
   issuerRef:
-    name: letsencrypt-staging
+    name: letsencrypt-prod
     kind: ClusterIssuer
