@@ -12,4 +12,4 @@ patches:
   - path: patch-mongodb-storage.yaml
 images:
   - name: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/inventory-service
-    newTag: 86ed83d4d1c6dcb63f9bef6931d3055e5d95515b
+    newTag: 968c2cb1bd0f336b5aa68730c86b3bab5bd6d613
