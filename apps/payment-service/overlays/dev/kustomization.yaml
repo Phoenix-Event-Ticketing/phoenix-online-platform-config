@@ -12,4 +12,4 @@ patches:
   - path: patch-mongodb-storage.yaml
 images:
   - name: asia-south1-docker.pkg.dev/phoenix-event-booking/phoenix-images/payment-service
-    newTag: dd9770dc95b02c5b4e9c97bd130a2dd3bd61707a
+    newTag: 3ab4f543f1ccf581d3b881e8c3e1e4ebe1912850
