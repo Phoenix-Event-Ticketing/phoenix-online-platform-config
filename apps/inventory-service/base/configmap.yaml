@@ -9,9 +9,14 @@ metadata:
 data:
   PORT: "8080"
   MONGODB_DATABASE: phoenix_inventory
+  APP_CORS_ALLOWED_ORIGINS: https://dev.phoenix-project.online,https://phoenix-project.online
   ENVIRONMENT: development
   SERVICE_NAME: inventory-service
   LOG_LEVEL: info
   EVENT_SERVICE_URL: http://event-service:8081
   HOLD_TTL_MINUTES: "15"
+  METRICS_ENABLED: "true"
+  OTEL_SERVICE_NAME: inventory-service
+  OTEL_TRACES_SAMPLER: "1.0"
+  JAEGER_ENDPOINT: http://jaeger-collector:14268/api/traces
   SERVICE_REGISTRY: '{"booking-service":["RESERVE_TICKET"],"event-service":["CREATE_TICKET_TYPE","UPDATE_TICKET_INVENTORY","VIEW_TICKET_INVENTORY"]}'

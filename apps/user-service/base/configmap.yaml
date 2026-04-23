@@ -12,3 +12,7 @@ data:
   APP_ENV: default
   LOG_FORMAT: json
   FEATURE_USER_PROFILE_CACHE: "true"
+  METRICS_ENABLED: "true"
+  OTEL_SERVICE_NAME: user-service
+  OTEL_TRACES_SAMPLER: "1.0"
+  JAEGER_ENDPOINT: http://jaeger-collector:14268/api/traces

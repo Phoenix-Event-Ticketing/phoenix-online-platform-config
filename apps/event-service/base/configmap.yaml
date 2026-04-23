@@ -12,3 +12,7 @@ data:
   SERVICE_NAME: event-service
   LOG_LEVEL: info
   INVENTORY_SERVICE_URL: http://inventory-service:8080
+  METRICS_ENABLED: "true"
+  OTEL_SERVICE_NAME: event-service
+  OTEL_TRACES_SAMPLER: "1.0"
+  JAEGER_ENDPOINT: http://jaeger-collector:14268/api/traces
