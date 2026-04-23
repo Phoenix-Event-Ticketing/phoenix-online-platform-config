@@ -10,6 +10,7 @@ data:
   APP_NAME: phoenix-online-booking-service
   APP_PORT: "8083"
   APP_ENV: dev
+  APP_CORS_ALLOWED_ORIGINS: https://dev.phoenix-project.online
   LOG_LEVEL: INFO
   MONGODB_DATABASE: booking_db
   JWT_ISSUER: phoenix-online-auth
@@ -17,4 +18,8 @@ data:
   EVENT_SERVICE_BASE_URL: http://event-service:8081/api/v1
   INVENTORY_SERVICE_BASE_URL: http://inventory-service:8080
   PAYMENT_SERVICE_BASE_URL: http://payment-service:4002/api
+  TRACING_ENABLED: "true"
+  OTEL_SERVICE_NAME: booking-service
+  OTEL_TRACES_SAMPLER: "1.0"
+  JAEGER_ENDPOINT: http://jaeger-collector:4318/v1/traces
   INTERNAL_SERVICE_PERMISSIONS_JSON: '{"payment-service":["PAYMENT_CALLBACK"],"inventory-service":["EXPIRE_BOOKING"]}'
