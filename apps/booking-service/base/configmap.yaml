@@ -15,7 +15,7 @@ data:
   MONGODB_DATABASE: booking_db
   JWT_ISSUER: phoenix-online-auth
   BOOKING_SERVICE_CALLBACK_BASE_URL: https://api-dev.phoenix-project.online
-  EVENT_SERVICE_BASE_URL: http://event-service:8081/api/v1
+  EVENT_SERVICE_BASE_URL: http://event-service:8081
   INVENTORY_SERVICE_BASE_URL: http://inventory-service:8080
   PAYMENT_SERVICE_BASE_URL: http://payment-service:4002/api
   TRACING_ENABLED: "true"
