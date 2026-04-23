@@ -16,4 +16,9 @@ data:
   JAEGER_ENDPOINT: http://jaeger-collector:14268/api/traces
   BOOKING_SERVICE_BASE_URL: http://booking-service:8083
   USER_SERVICE_BASE_URL: http://user-service:3000
+  JWT_ISSUER: phoenix-online-auth
+  SERVICE_NAME: payment-service
+  INTERNAL_SERVICE_ID: payment-service
+  INTERNAL_SERVICE_TOKEN_TTL_SECONDS: "300"
+  SERVICE_REGISTRY: '{"booking-service":["CREATE_PAYMENT_INTERNAL"]}'
   CORS_ORIGIN: "*"
