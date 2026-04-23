@@ -72,7 +72,7 @@ data:
   MONGODB_DATABASE: phoenix_inventory
   PORT: "8080"
   SERVICE_NAME: inventory-service
-  SERVICE_REGISTRY: '{"booking-service":["RESERVE_TICKET"],"event-service":["CREATE_TICKET_TYPE","UPDATE_TICKET_INVENTORY","VIEW_TICKET_INVENTORY"]}'
+  SERVICE_REGISTRY: '{"booking-service":["RESERVE_TICKET","VIEW_TICKET_INVENTORY"],"event-service":["CREATE_TICKET_TYPE","UPDATE_TICKET_INVENTORY","VIEW_TICKET_INVENTORY"]}'
 kind: ConfigMap
 metadata:
   labels:
