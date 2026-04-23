@@ -30,7 +30,7 @@ data:
   APP_NAME: phoenix-online-booking-service
   APP_PORT: "8083"
   BOOKING_SERVICE_CALLBACK_BASE_URL: https://api-dev.phoenix-project.online
-  EVENT_SERVICE_BASE_URL: http://event-service:8081/api/v1
+  EVENT_SERVICE_BASE_URL: http://event-service:8081
   INTERNAL_SERVICE_PERMISSIONS_JSON: '{"payment-service":["PAYMENT_CALLBACK"],"inventory-service":["EXPIRE_BOOKING"]}'
   INVENTORY_SERVICE_BASE_URL: http://inventory-service:8080
   JWT_ISSUER: phoenix-online-auth
