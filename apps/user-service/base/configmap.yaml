@@ -10,6 +10,7 @@ data:
   APP_NAME: user-service
   APP_PORT: "3000"
   APP_ENV: default
+  JWT_ISSUER: phoenix-online-auth
   LOG_FORMAT: json
   FEATURE_USER_PROFILE_CACHE: "true"
   METRICS_ENABLED: "true"
