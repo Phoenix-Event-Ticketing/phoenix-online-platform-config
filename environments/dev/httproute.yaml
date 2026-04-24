@@ -15,20 +15,6 @@ spec:
     - matches:
         - path:
             type: PathPrefix
-            value: /grafana
-      backendRefs:
-        - name: grafana
-          port: 3000
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /jaeger
-      backendRefs:
-        - name: jaeger-query
-          port: 16686
-    - matches:
-        - path:
-            type: PathPrefix
             value: /inventory
       backendRefs:
         - name: inventory-service
