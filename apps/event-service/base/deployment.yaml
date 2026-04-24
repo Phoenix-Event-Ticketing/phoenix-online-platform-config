@@ -46,6 +46,21 @@ spec:
                 secretKeyRef:
                   name: event-service-secrets
                   key: JWT_SECRET
+            - name: CLOUDINARY_CLOUD_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: event-service-cloudinary-secrets
+                  key: CLOUDINARY_CLOUD_NAME
+            - name: CLOUDINARY_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: event-service-cloudinary-secrets
+                  key: CLOUDINARY_API_KEY
+            - name: CLOUDINARY_API_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: event-service-cloudinary-secrets
+                  key: CLOUDINARY_API_SECRET
           resources:
             requests:
               cpu: 100m
