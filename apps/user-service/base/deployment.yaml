@@ -61,6 +61,7 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 2
             failureThreshold: 3
+          # Allow slow boots before liveness checks begin.
           startupProbe:
             httpGet:
               path: /health/ready
